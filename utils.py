@@ -56,20 +56,68 @@ def bomb(board):
 
 ###Makes sure that the 2 input variables after the help message prompt are valid###
 
-def check_choice(choice):
+def check_format(choice):
     """ensures choice follows proper format
 
-       choice format is: (1,1)
+       choice format is: (1,1) with whitespaces allowed around numbers
+
+    >>> check_format('(1,1)')
+    True
+
+    >>> check_format('1,2')
+    False
+
+    >>> check_format('(1, 2)')
+    True
 
     """
     if not choice.startswith('('):
         print("Coordinate should start with '('")
+        return False
+    if not choice.endswith(')'):
+        print("Coordinate should end with ')'")
+        return False
     numbers = choice[1:-1]
-    print(numbers)        
-    input_list = numbers.split(',')
-    input_list = [int(a) for a in input_list]
+    for item in numbers.split(','):
+        if not item.strip().isdigit():
+            print("input is not vaild number")
+            return False
+    return True
+
+def extract_coords(choice):
+    """seperates the input numbers into a coordinate tuple
+
+    >>> extract_coords('(1, 1)')
+    (1, 1)
+    
+    """
+    # split
+    numbers = choice[1:-1].split(',')
+    input_list = [int(a) for a in numbers]
     x = input_list[0]
     y = input_list[1]
-    print(x)
-    print(y)
+    return x, y
+
+def check_within(board_coord, BOARD_SIZE):
+    """checks to make sure that the coordinates in the tuple are valid on the board
+
+    >>> check_within((1, 1), 8)
+    True
+
+    >>> check_within((-1, 1), 8)
+    False
+
+    >>> check_within((9,10), 24)
+    True
+    
+    """
+    for coord in board_coord:
+        if 0 < coord <= BOARD_SIZE:
+            return True
+        else:
+            return False 
+
+if __name__ == '__main__':
+    import doctest
+    doctest.testmod()
 

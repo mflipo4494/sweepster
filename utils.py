@@ -5,7 +5,7 @@ def flatten(board):
     flat = []
     for row in board:
         for column in board[row]:
-            flat.append(board[row][column])
+            flat.append(board[column][row])
     return flat
 
 ###function for board creation & size adjustment####
@@ -25,7 +25,7 @@ def show_bombs(board):
         if cell['bomb'] == True:
             symbol_data.append('*')
         else:
-            symbol_data.append(' ')
+            symbol_data.append('?')
     return symbol_data
 
 def show_board(symbol_data):
@@ -49,8 +49,8 @@ def bomb(board):
     while bomb_count < 10:  
         for row in board:
             for column in board[row]:                        
-                if random.random() < 0.05 and board[row][column]['bomb'] == False and bomb_count < 10 :
-                    board[row][column]['bomb'] = True
+                if random.random() < 0.05 and board[column][row]['bomb'] == False and bomb_count < 10 :
+                    board[column][row]['bomb'] = True
                     bomb_count += 1
     return board
 
@@ -94,9 +94,9 @@ def extract_coords(choice):
     # split
     numbers = choice[1:-1].split(',')
     input_list = [int(a) for a in numbers]
-    x = input_list[0]
-    y = input_list[1]
-    return x, y
+    column = input_list[0]
+    row = input_list[1]
+    return column, row
 
 def check_within(board_coord, BOARD_SIZE):
     """checks to make sure that the coordinates in the tuple are valid on the board
@@ -115,7 +115,14 @@ def check_within(board_coord, BOARD_SIZE):
         if 0 < coord <= BOARD_SIZE:
             return True
         else:
-            return False 
+            return False
+
+def bomb_check(coord, board):
+    """checks the choice input with the board to seach for bombs
+    """
+    print(coord)
+    column, row = coord
+    return board[column][row]['bomb']
 
 if __name__ == '__main__':
     import doctest
